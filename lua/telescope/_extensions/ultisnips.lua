@@ -17,7 +17,7 @@ local ultisnips = function(opts)
   opts = opts or {}
   local objs = {}
 
-  -- if vim.fn.exists('*UltiSnips#SnippetsInCurrentScope') == 0 then 
+  -- if vim.fn.exists('*UltiSnips#SnippetsInCurrentScope') == 0 then
   --   print('telescope-ultisnips.nvim: no snippets available in empty buffer')
   --   return
   -- end
@@ -33,19 +33,18 @@ local ultisnips = function(opts)
     local _, _, linenr = string.find(v.location, ':(%d+)')
 
     table.insert(objs, {
-        name = k,
-        desc = v.description,
-        filepath = filepath,
-        filename = filename,
-        linenr = tonumber(linenr),
-      })
-
+      name = k,
+      desc = v.description,
+      filepath = filepath,
+      filename = filename,
+      linenr = tonumber(linenr),
+    })
   end
 
   table.sort(objs, function(a, b)
     if a.filename ~= b.filename then return a.filename > b.filename end
-      return a.name > b.name
-    end)
+    return a.name > b.name
+  end)
 
 
   local displayer = entry_display.create {
@@ -61,7 +60,6 @@ local ultisnips = function(opts)
     opts, {
       prompt_title = 'Ultisnips',
       finder = finders.new_table {
-
         results = objs,
         entry_maker = function(entry)
           return {
@@ -93,22 +91,18 @@ local ultisnips = function(opts)
           }
         end,
       },
-
       previewer = previewers.display_content.new(opts),
       sorter = conf.generic_sorter(opts),
       attach_mappings = function()
         actions.select_default:replace(function(prompt_bufnr)
-            local selection = action_state.get_selected_entry()
-            actions.close(prompt_bufnr)
-            vim.api.nvim_put({selection.value.name}, '', true, true)
-            vim.cmd([[call UltiSnips#ExpandSnippet()]])
+          local selection = action_state.get_selected_entry()
+          actions.close(prompt_bufnr)
+          vim.api.nvim_put({selection.value.name}, '', true, true)
+          vim.cmd([[call UltiSnips#ExpandSnippet()]])
+        end)
 
-            vim.fn.feedkeys('i')
-          end
-        )
         return true
       end,
-
     }
   ):find()
 end -- end custom function
